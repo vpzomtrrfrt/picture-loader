@@ -1,0 +1,24 @@
+{
+  "name": "picture-loader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vpzomtrrfrt/picture-loader.git"
+  },
+  "author": "vpzom",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vpzomtrrfrt/picture-loader/issues"
+  },
+  "homepage": "https://github.com/vpzomtrrfrt/picture-loader#readme",
+  "dependencies": {
+    "loader-utils": "^1.1.0",
+    "mime": "^2.2.0",
+    "sharp": "^0.19.0"
+  }
+}
