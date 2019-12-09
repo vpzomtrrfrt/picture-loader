@@ -10,7 +10,28 @@ module.exports = function(content, map, meta) {
 	if(!config.formats) return callback(new Error("formats missing"));
 	if(!config.sizes) return callback(new Error("sizes missing"));
 
-	const name = '[hash]-[width].[ext]';
+	let useHeight;
+
+	if(config.useHeight) {
+		if(typeof config.useHeight === "string") {
+			if(config.useHeight === "true") useHeight = true;
+			else if(config.useHeight === "false") useHeight = false;
+			else {
+				return callback(new Error("Invalid value for useHeight"));
+			}
+		}
+		else if(typeof config.useHeight === "boolean") {
+			useHeight = config.useHeight;
+		}
+		else {
+			return callback(new Error("Invalid value for useHeight"));
+		}
+	}
+	else {
+		useHeight = false;
+	}
+
+	const name = '[hash]-[size].[ext]';
 	const formats = (Array.isArray(config.formats) ? config.formats : config.formats.split(","));
 	const sizes = (Array.isArray(config.sizes) ? config.sizes : config.sizes.split(","))
 		.map(x=>parseInt(x));
@@ -20,7 +41,10 @@ module.exports = function(content, map, meta) {
 	.then(metadata => {
 		return Promise.all(formats.map(format => {
 			return Promise.all(sizes.map(size => new Promise((resolve, reject) => {
-				img.resize(size)
+				img.resize(
+					useHeight ? null : size,
+					useHeight ? size : null,
+				)
 				.toFormat(format)
 				.toBuffer((err, output) => {
 					if(err) return reject(err);
@@ -35,7 +59,7 @@ module.exports = function(content, map, meta) {
 							content: content
 						}
 					)
-					.replace(/\[width\]/ig, size);
+					.replace(/\[size\]/ig, size);
 
 					this.emitFile(fileName, buffer);
 
