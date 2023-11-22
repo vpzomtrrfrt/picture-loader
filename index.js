@@ -31,6 +31,8 @@ module.exports = function(content, map, meta) {
 		useHeight = false;
 	}
 
+	let lossless = config.lossless ?? true;
+
 	const name = '[hash]-[size].[ext]';
 	const formats = (Array.isArray(config.formats) ? config.formats : config.formats.split(","));
 	const sizes = (Array.isArray(config.sizes) ? config.sizes : config.sizes.split(","))
@@ -45,7 +47,7 @@ module.exports = function(content, map, meta) {
 					useHeight ? null : size,
 					useHeight ? size : null,
 				)
-				.toFormat(format)
+				.toFormat(format, {lossless})
 				.toBuffer((err, output) => {
 					if(err) return reject(err);
 					resolve(output);
